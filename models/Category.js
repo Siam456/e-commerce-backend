@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema({
-  parent: {
+  title: {
     type: String,
     required: true,
   },
@@ -17,14 +17,14 @@ const categorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  children: [{}],
+
   status: {
     type: String,
-    enum: ['Show', 'Hide'],
-    default: 'Show',
+    enum: ["Show", "Hide"],
+    default: "Show",
   },
 });
 
-const Category = mongoose.model('Category', categorySchema);
+const Category = mongoose.model("Category", categorySchema);
 
 module.exports = Category;

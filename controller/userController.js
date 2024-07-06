@@ -1,22 +1,22 @@
-require('dotenv').config();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const { signInToken, tokenForVerify, sendEmail } = require('../config/auth');
+require("dotenv").config();
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const { signInToken, tokenForVerify, sendEmail } = require("../config/auth");
 
 const verifyEmailAddress = async (req, res) => {
   const isAdded = await User.findOne({ email: req.body.email });
   if (isAdded) {
     return res.status(403).send({
-      message: 'This Email already Added!',
+      message: "This Email already Added!",
     });
   } else {
     const token = tokenForVerify(req.body);
     const body = {
       from: process.env.EMAIL_USER,
       to: `${req.body.email}`,
-      subject: 'Email Activation',
-      subject: 'Verify Your Email',
+      subject: "Email Activation",
+      subject: "Verify Your Email",
       html: `<h2>Hello ${req.body.email}</h2>
       <p>Verify your email address to complete the signup and login into your <strong>KachaBazar</strong> account.</p>
 
@@ -33,7 +33,7 @@ const verifyEmailAddress = async (req, res) => {
              `,
     };
 
-    const message = 'Please check your email to verify!';
+    const message = "Please check your email to verify!";
     sendEmail(body, res, message);
   }
 };
@@ -49,7 +49,7 @@ const registerUser = async (req, res) => {
       token,
       name: isAdded.name,
       email: isAdded.email,
-      message: 'Email Already Verified!',
+      message: "Email Already Verified!",
     });
   }
 
@@ -57,7 +57,7 @@ const registerUser = async (req, res) => {
     jwt.verify(token, process.env.JWT_SECRET_FOR_VERIFY, (err, decoded) => {
       if (err) {
         return res.status(401).send({
-          message: 'Token Expired, Please try again!',
+          message: "Token Expired, Please try again!",
         });
       } else {
         const newUser = new User({
@@ -72,7 +72,7 @@ const registerUser = async (req, res) => {
           _id: newUser._id,
           name: newUser.name,
           email: newUser.email,
-          message: 'Email Verified, Please Login Now!',
+          message: "Email Verified, Please Login Now!",
         });
       }
     });
@@ -100,7 +100,7 @@ const loginUser = async (req, res) => {
       });
     } else {
       res.status(401).send({
-        message: 'Invalid user or password!',
+        message: "Invalid user or password!",
       });
     }
   } catch (err) {
@@ -114,14 +114,14 @@ const forgetPassword = async (req, res) => {
   const isAdded = await User.findOne({ email: req.body.verifyEmail });
   if (!isAdded) {
     return res.status(404).send({
-      message: 'User Not found with this email!',
+      message: "User Not found with this email!",
     });
   } else {
     const token = tokenForVerify(isAdded);
     const body = {
       from: process.env.EMAIL_USER,
       to: `${req.body.verifyEmail}`,
-      subject: 'Password Reset',
+      subject: "Password Reset",
       html: `<h2>Hello ${req.body.verifyEmail}</h2>
       <p>A request has been received to change the password for your <strong>Kachabazar</strong> account </p>
 
@@ -138,7 +138,7 @@ const forgetPassword = async (req, res) => {
              `,
     };
 
-    const message = 'Please check your email to reset password!';
+    const message = "Please check your email to reset password!";
     sendEmail(body, res, message);
   }
 };
@@ -152,13 +152,13 @@ const resetPassword = async (req, res) => {
     jwt.verify(token, process.env.JWT_SECRET_FOR_VERIFY, (err, decoded) => {
       if (err) {
         return res.status(500).send({
-          message: 'Token expired, please try again!',
+          message: "Token expired, please try again!",
         });
       } else {
         user.password = bcrypt.hashSync(req.body.newPassword);
         user.save();
         res.send({
-          message: 'Your password change successful, you can login now!',
+          message: "Your password change successful, you can login now!",
         });
       }
     });
@@ -171,7 +171,7 @@ const changePassword = async (req, res) => {
     if (!user.password) {
       return res.send({
         message:
-          'For change password,You need to sign in with email & password!',
+          "For change password,You need to sign in with email & password!",
       });
     } else if (
       user &&
@@ -180,11 +180,11 @@ const changePassword = async (req, res) => {
       user.password = bcrypt.hashSync(req.body.newPassword);
       await user.save();
       res.send({
-        message: 'Your password change successfully!',
+        message: "Your password change successfully!",
       });
     } else {
       res.status(401).send({
-        message: 'Invalid email or current password!',
+        message: "Invalid email or current password!",
       });
     }
   } catch (err) {
@@ -275,7 +275,7 @@ const updateUser = async (req, res) => {
     }
   } catch (err) {
     res.status(404).send({
-      message: 'Your email is not valid!',
+      message: "Your email is not valid!",
     });
   }
 };
@@ -288,7 +288,7 @@ const deleteUser = (req, res) => {
       });
     } else {
       res.status(200).send({
-        message: 'User Deleted Successfully!',
+        message: "User Deleted Successfully!",
       });
     }
   });

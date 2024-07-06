@@ -3,13 +3,11 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useFindAndModify: false,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
-    console.log("mongodb connection success!");
+    const url = process.env.MONGO_URI;
+    if (url) {
+      await mongoose.connect(url);
+      console.log("mongodb connection successful!");
+    }
   } catch (err) {
     console.log("mongodb connection failed!", err.message);
   }

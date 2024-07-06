@@ -9,6 +9,7 @@ const {
   updateCategory,
   updateStatus,
   deleteCategory,
+  getNewShowingCategory,
 } = require("../controller/categoryController");
 
 //add a category
@@ -19,6 +20,8 @@ router.post("/all", addAllCategory);
 
 //get only showing category
 router.get("/show", getShowingCategory);
+
+router.get("/new", getNewShowingCategory);
 
 //get all category
 router.get("/", getAllCategory);
