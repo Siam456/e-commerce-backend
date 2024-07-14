@@ -8,7 +8,8 @@
     "start": "node api/index.js",
     "production": "NODE_ENV=production nodemon api/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "data:import": "node seed.js"
+    "data:import": "node seed.js",
+    "vercel-build": "echo hello from vercel"
   },
   "author": "htmlLover",
   "license": "ISC",
