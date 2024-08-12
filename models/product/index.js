@@ -1,16 +1,5 @@
 const mongoose = require("mongoose");
 
-const DimensionSchema = new mongoose.Schema({
-  label: {
-    type: String,
-    required: true,
-  },
-  values: {
-    type: [String],
-    default: [],
-  },
-});
-
 const productSchema = new mongoose.Schema(
   {
     images: [
@@ -94,44 +83,43 @@ const productSchema = new mongoose.Schema(
       default: 0,
     },
 
-    colors: [
-      {
-        name: {
-          type: String,
-          required: true,
+    dimensions: {
+      colors: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+          hexCode: {
+            type: String,
+          },
+          imageUrl: {
+            type: String,
+          },
         },
-        hexCode: {
+      ],
+      sizes: [
+        {
           type: String,
         },
-        imageUrl: {
+      ],
+      range: [
+        {
           type: String,
         },
-      },
-    ],
-
-    dimensions: [DimensionSchema],
-
+      ],
+    },
     varieties: [
       {
         color: {
           type: String,
         },
-        discount: {
-          type: Number,
-          default: 0,
+        size: {
+          type: String,
         },
-        //         diamentions
-        // :
-        // Array(1)
-        // 0
-        // :
-        // {Engine: null}
-        diamentions: [
-          {
-            type: String,
-          },
-        ],
-
+        range: {
+          type: String,
+        },
         price: {
           type: Number,
           default: 0,
