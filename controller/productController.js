@@ -1,8 +1,29 @@
-const Product = require("../models/Product");
+const Product = require("../models/product");
 
 const addProduct = async (req, res) => {
   try {
+    console.log(req.body);
+
+    if (typeof req.body.dimensions === "string") {
+      req.body.dimensions = JSON.parse(req.body.dimensions);
+    }
+    if (typeof req.body.varieties === "string") {
+      req.body.varieties = JSON.parse(req.body.varieties);
+    }
+
+    //catoegory
+    if (req.body.category) {
+      req.body.category = JSON.parse(req.body.category);
+    }
+
+    //tags
+    if (req.body.tag) {
+      req.body.tag = JSON.parse(req.body.tag);
+    }
+
     const newProduct = new Product(req.body);
+    console.log(newProduct);
+
     await newProduct.save();
     res.status(200).send({
       message: "Product Added Successfully!",
@@ -231,7 +252,7 @@ const updateProduct = async (req, res) => {
       product.range = req.body.range;
       product.sizes = req.body.sizes;
       product.tag = req.body.tag;
-      product.short_description = req.body.short_description;
+      product.shortDescription = req.body.shortDescription;
       await product.save();
       res.send({ data: product, message: "Product updated successfully!" });
     }
