@@ -10,6 +10,7 @@ const {
   updateStatus,
   deleteCategory,
   getNewShowingCategory,
+  getAllCategoryAsOptions,
 } = require("../controller/categoryController");
 
 //add a category
@@ -25,6 +26,7 @@ router.get("/new", getNewShowingCategory);
 
 //get all category
 router.get("/", getAllCategory);
+router.get("/options/all", getAllCategoryAsOptions);
 
 //get a category
 router.get("/:id", getCategoryById);

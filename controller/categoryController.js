@@ -127,6 +127,22 @@ const deleteCategory = async (req, res) => {
   }
 };
 
+const getAllCategoryAsOptions = async (req, res) => {
+  try {
+    const categories = await Category.find({}).sort({ _id: -1 });
+    const options = categories.map((category) => ({
+      _id: category._id,
+      value: category.title,
+      label: category.title,
+    }));
+    res.send(options);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   addCategory,
   addAllCategory,
@@ -137,4 +153,5 @@ module.exports = {
   updateStatus,
   deleteCategory,
   getNewShowingCategory,
+  getAllCategoryAsOptions,
 };
