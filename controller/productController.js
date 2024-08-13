@@ -2,13 +2,16 @@ const Product = require("../models/product");
 
 const addProduct = async (req, res) => {
   try {
-    console.log(req.body);
-
     if (typeof req.body.dimensions === "string") {
       req.body.dimensions = JSON.parse(req.body.dimensions);
     }
     if (typeof req.body.varieties === "string") {
       req.body.varieties = JSON.parse(req.body.varieties);
+    }
+
+    //colors
+    if (req.body.colors) {
+      req.body.colors = JSON.parse(req.body.colors);
     }
 
     //catoegory
@@ -22,7 +25,6 @@ const addProduct = async (req, res) => {
     }
 
     const newProduct = new Product(req.body);
-    console.log(newProduct);
 
     await newProduct.save();
     res.status(200).send({
@@ -234,6 +236,27 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
+    if (typeof req.body.dimensions === "string") {
+      req.body.dimensions = JSON.parse(req.body.dimensions);
+    }
+    if (typeof req.body.varieties === "string") {
+      req.body.varieties = JSON.parse(req.body.varieties);
+    }
+
+    //colors
+    if (req.body.colors) {
+      req.body.colors = JSON.parse(req.body.colors);
+    }
+
+    //catoegory
+    if (req.body.category) {
+      req.body.category = JSON.parse(req.body.category);
+    }
+
+    //tags
+    if (req.body.tag) {
+      req.body.tag = JSON.parse(req.body.tag);
+    }
     if (product) {
       product.sku = req.body.sku;
       product.title = req.body.title;
@@ -253,6 +276,12 @@ const updateProduct = async (req, res) => {
       product.sizes = req.body.sizes;
       product.tag = req.body.tag;
       product.shortDescription = req.body.shortDescription;
+      product.dimensions = req.body.dimensions;
+      product.varieties = req.body.varieties;
+      product.status = req.body.status;
+      product.views = req.body.views;
+      product.updatedAt = Date.now();
+
       await product.save();
       res.send({ data: product, message: "Product updated successfully!" });
     }
@@ -262,27 +291,20 @@ const updateProduct = async (req, res) => {
   }
 };
 
-const updateStatus = (req, res) => {
-  const newStatus = req.body.status;
-  Product.updateOne(
-    { _id: req.params.id },
-    {
-      $set: {
-        status: newStatus,
-      },
-    },
-    (err) => {
-      if (err) {
-        res.status(500).send({
-          message: err.message,
-        });
-      } else {
-        res.status(200).send({
-          message: `Product ${newStatus} Successfully!`,
-        });
-      }
+const updateStatus = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      product.status = req.body.status;
+      await product.save();
+      res.send({
+        data: product,
+        message: "Product status updated successfully!",
+      });
     }
-  );
+  } catch (err) {
+    res.status(404).send(err.message);
+  }
 };
 
 const deleteProduct = (req, res) => {
